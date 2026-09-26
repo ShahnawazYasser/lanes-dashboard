@@ -70,7 +70,7 @@ export function SpacesTimeline({
           {/* Header */}
           <div className="flex border-b border-line pb-1.5">
             <div className="w-[150px] shrink-0" />
-            <div className="relative h-6 flex-1">
+            <div className="relative h-9 flex-1">
               {months.map((m, i) => (
                 <div
                   key={i}
@@ -83,7 +83,7 @@ export function SpacesTimeline({
               {SEASON_BANDS.map((b) => (
                 <div
                   key={b.label}
-                  className="absolute top-0 whitespace-nowrap text-[10px] text-season-ink"
+                  className="absolute top-4 whitespace-nowrap pl-1.5 text-[10px] text-season-ink"
                   style={{ left: `${pctDate(b.start)}%` }}
                 >
                   {b.label}
