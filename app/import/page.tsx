@@ -1,12 +1,12 @@
 import { Panel } from "@/components/ui/Panel";
 import { EmptyState } from "@/components/ui/EmptyState";
 
-export default function OverviewPage() {
+export default function ImportPage() {
   return (
     <Panel>
       <EmptyState
-        title="Overview is coming together"
-        hint="This screen will compose Contracts and Prospects once both are built."
+        title="Import not built yet"
+        hint="This will let Ali bring in contracts and prospects from a CSV or Excel sheet."
       />
     </Panel>
   );

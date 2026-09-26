@@ -1,26 +1,183 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #e9ede9;
+  --surface: #ffffff;
+  --surface-2: #f4f6f3;
+  --ink: #142120;
+  --ink-2: #56645f;
+  --ink-3: #86938e;
+  --line: #d3dad4;
+  --brand: #1e4d46;
+  --brand-ink: #ffffff;
+  --go: #15865c;
+  --hold: #c4860a;
+  --stop: #cc3d28;
+  --go-bg: #ddf1e7;
+  --hold-bg: #faefd3;
+  --stop-bg: #fadfda;
+  --season: rgba(30, 77, 70, 0.08);
+  --season-ink: #2f6b61;
+
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --container-max: 1180px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+@media (min-width: 1440px) {
+  :root {
+    --container-max: 1320px;
+  }
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --bg: #0e1917;
+    --surface: #15221f;
+    --surface-2: #1b2a27;
+    --ink: #e6eeea;
+    --ink-2: #a2b3ae;
+    --ink-3: #71847e;
+    --line: #293a36;
+    --brand: #5fb8a6;
+    --brand-ink: #0e1917;
+    --go: #3dc08b;
+    --hold: #e7b43a;
+    --stop: #f06a55;
+    --go-bg: rgba(61, 192, 139, 0.14);
+    --hold-bg: rgba(231, 180, 58, 0.15);
+    --stop-bg: rgba(240, 106, 85, 0.15);
+    --season: rgba(95, 184, 166, 0.09);
+    --season-ink: #7fcbbb;
   }
 }
 
+/*
+ * Attribute selectors (not `:root[...]`) so a `data-theme` can be set on any
+ * element, not just <html> — this lets /styleguide render light and dark
+ * side by side. See the `[data-theme]` re-alias block below `@theme inline`
+ * for why both are needed: custom properties only re-resolve `var()` at the
+ * element where they're (re)declared, so the semantic `--color-*` aliases
+ * must be re-declared on the same scoped element too, not just the raw tokens.
+ */
+[data-theme="dark"] {
+  --bg: #0e1917;
+  --surface: #15221f;
+  --surface-2: #1b2a27;
+  --ink: #e6eeea;
+  --ink-2: #a2b3ae;
+  --ink-3: #71847e;
+  --line: #293a36;
+  --brand: #5fb8a6;
+  --brand-ink: #0e1917;
+  --go: #3dc08b;
+  --hold: #e7b43a;
+  --stop: #f06a55;
+  --go-bg: rgba(61, 192, 139, 0.14);
+  --hold-bg: rgba(231, 180, 58, 0.15);
+  --stop-bg: rgba(240, 106, 85, 0.15);
+  --season: rgba(95, 184, 166, 0.09);
+  --season-ink: #7fcbbb;
+}
+
+[data-theme="light"] {
+  --bg: #e9ede9;
+  --surface: #ffffff;
+  --surface-2: #f4f6f3;
+  --ink: #142120;
+  --ink-2: #56645f;
+  --ink-3: #86938e;
+  --line: #d3dad4;
+  --brand: #1e4d46;
+  --brand-ink: #ffffff;
+  --go: #15865c;
+  --hold: #c4860a;
+  --stop: #cc3d28;
+  --go-bg: #ddf1e7;
+  --hold-bg: #faefd3;
+  --stop-bg: #fadfda;
+  --season: rgba(30, 77, 70, 0.08);
+  --season-ink: #2f6b61;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-line: var(--line);
+  --color-brand: var(--brand);
+  --color-brand-ink: var(--brand-ink);
+  --color-go: var(--go);
+  --color-hold: var(--hold);
+  --color-stop: var(--stop);
+  --color-go-bg: var(--go-bg);
+  --color-hold-bg: var(--hold-bg);
+  --color-stop-bg: var(--stop-bg);
+  --color-season: var(--season);
+  --color-season-ink: var(--season-ink);
+
+  --font-sans: var(--font-schibsted-grotesk);
+}
+
+/* Re-resolves the aliases above on any nested `[data-theme]` scope, not just :root. */
+[data-theme] {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-line: var(--line);
+  --color-brand: var(--brand);
+  --color-brand-ink: var(--brand-ink);
+  --color-go: var(--go);
+  --color-hold: var(--hold);
+  --color-stop: var(--stop);
+  --color-go-bg: var(--go-bg);
+  --color-hold-bg: var(--hold-bg);
+  --color-stop-bg: var(--stop-bg);
+  --color-season: var(--season);
+  --color-season-ink: var(--season-ink);
+}
+
+@theme {
+  --radius-lg: 14px;
+  --radius: 9px;
+  --radius-sm: 6px;
+  --shadow-panel: 0 1px 2px rgba(20, 33, 32, 0.06), 0 8px 24px rgba(20, 33, 32, 0.06);
+}
+
+* {
+  border-color: var(--line);
+}
+
+html {
+  height: 100%;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  font-variant-numeric: tabular-nums;
+}
+
+:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
 }
