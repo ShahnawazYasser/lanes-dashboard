@@ -195,8 +195,9 @@ export function ContractsView() {
               <SortHeader className="w-[90px]" label="Space" active={sortKey === "space"} dir={sortDir} onClick={() => toggleSort("space")} />
               <SortHeader className="w-[130px]" label="Ends" active={sortKey === "ends"} dir={sortDir} onClick={() => toggleSort("ends")} />
               <span className="w-[120px]">Renewal</span>
-              <span className="w-[110px]">Owner</span>
-              <span className="w-[170px]">Contact</span>
+              <span className="w-[100px]">Owner</span>
+              <span className="hidden min-[1180px]:block min-w-0 flex-1">Notes</span>
+              <span className="w-[210px]">Contact</span>
             </div>
             {sorted.map((c) => (
               <ContractRow key={c.id} contract={c} onOpen={() => openEdit(c)} />
@@ -268,11 +269,14 @@ function ContractRow({
       <div className="order-3 min-[861px]:order-none w-full min-[861px]:w-[120px]">
         <Chip variant={RENEWAL_VARIANT[contract.renewal_status]}>{contract.renewal_status}</Chip>
       </div>
-      <div className="hidden min-[861px]:block w-[110px] truncate text-[13.5px] text-ink-2">
+      <div className="hidden min-[861px]:block w-[100px] truncate text-[13.5px] text-ink-2">
         {contract.owner || "—"}
       </div>
-      <div className="order-4 min-[861px]:order-none flex w-full min-[861px]:w-[170px] items-center gap-2">
-        <span className="min-w-0 flex-1 truncate text-[13.5px] text-ink-2">{contract.contact_name || "—"}</span>
+      <div className="hidden min-[1180px]:block min-w-0 flex-1 truncate text-[13.5px] text-ink-2">
+        {contract.notes || "—"}
+      </div>
+      <div className="order-4 min-[861px]:order-none flex w-full min-[861px]:w-[210px] items-center justify-between gap-3">
+        <span className="min-w-0 truncate text-[13.5px] text-ink-2">{contract.contact_name || "—"}</span>
         {contract.phone ? (
           <Button
             variant="whatsapp"
@@ -281,11 +285,17 @@ function ContractRow({
             target="_blank"
             rel="noreferrer"
             onClick={(e: React.MouseEvent) => e.stopPropagation()}
+            className="shrink-0"
           >
             WhatsApp
           </Button>
         ) : null}
       </div>
+      {contract.notes ? (
+        <div className="order-6 min-[1180px]:hidden w-full truncate text-[12.5px] text-ink-3">
+          {contract.notes}
+        </div>
+      ) : null}
     </div>
   );
 }
