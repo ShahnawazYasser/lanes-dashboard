@@ -56,6 +56,11 @@ To trigger it manually in dev: `curl -H "Authorization: Bearer $CRON_SECRET" loc
 
 ## Handover to Ali
 
+- **The PIN.** The dashboard is behind a 4-digit PIN — it's the only thing standing
+  between the link and rent/contact info, so don't forward it outside the team.
+  Ask Shahnawaz for the current PIN if you don't have it; once entered, it's
+  remembered on that device for 30 days, so you shouldn't need to re-enter it often.
+  See `09-auth-deploy.md` for why this is a PIN and not full login.
 - **The traffic light.** Green means the contract has 8+ weeks left. Amber ("needs
   attention soon") means 4–7 weeks left. Red ("needs attention now") means under 4
   weeks left or already ended. It's driven entirely by the end date on the contract —
