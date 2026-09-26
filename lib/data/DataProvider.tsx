@@ -16,6 +16,9 @@ type DataContextValue = {
   ) => Promise<Contract>;
   updateContract: (id: string, input: Partial<Contract>) => Promise<Contract>;
   deleteContract: (id: string) => Promise<void>;
+  createContractsBatch: (
+    inputs: (Partial<Contract> & Pick<Contract, "brand" | "end_date">)[],
+  ) => Promise<Contract[]>;
   createProspect: (
     input: Partial<Prospect> & Pick<Prospect, "name">,
     firstComment?: string,
@@ -23,6 +26,11 @@ type DataContextValue = {
   updateProspect: (id: string, input: Partial<Prospect>) => Promise<Prospect>;
   deleteProspect: (id: string) => Promise<void>;
   addComment: (prospectId: string, body: string) => Promise<ProspectComment>;
+  /** Batch-inserts prospects, then a first comment per prospect where `comments[i]` is non-null. */
+  createProspectsBatch: (
+    inputs: (Partial<Prospect> & Pick<Prospect, "name">)[],
+    comments: (string | null)[],
+  ) => Promise<Prospect[]>;
 };
 
 const DataContext = createContext<DataContextValue | null>(null);
@@ -93,6 +101,17 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     [fetchContracts],
   );
 
+  const createContractsBatch = useCallback<DataContextValue["createContractsBatch"]>(
+    async (inputs) => {
+      if (inputs.length === 0) return [];
+      const { data, error } = await supabase.from("contracts").insert(inputs).select();
+      if (error) throw error;
+      await fetchContracts();
+      return data ?? [];
+    },
+    [fetchContracts],
+  );
+
   const createProspect = useCallback<DataContextValue["createProspect"]>(
     async (input, firstComment) => {
       const { data, error } = await supabase.from("prospects").insert(input).select().single();
@@ -138,6 +157,24 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     [fetchProspects],
   );
 
+  const createProspectsBatch = useCallback<DataContextValue["createProspectsBatch"]>(
+    async (inputs, comments) => {
+      if (inputs.length === 0) return [];
+      const { data, error } = await supabase.from("prospects").insert(inputs).select();
+      if (error) throw error;
+      const commentRows = data
+        .map((p, i) => (comments[i] ? { prospect_id: p.id, body: comments[i] as string } : null))
+        .filter((c): c is { prospect_id: string; body: string } => c !== null);
+      if (commentRows.length > 0) {
+        const { error: commentError } = await supabase.from("prospect_comments").insert(commentRows);
+        if (commentError) throw commentError;
+      }
+      await fetchProspects();
+      return data;
+    },
+    [fetchProspects],
+  );
+
   const addComment = useCallback(
     async (prospectId: string, body: string) => {
       const { data, error } = await supabase
@@ -162,10 +199,12 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         createContract,
         updateContract,
         deleteContract,
+        createContractsBatch,
         createProspect,
         updateProspect,
         deleteProspect,
         addComment,
+        createProspectsBatch,
       }}
     >
       {children}
