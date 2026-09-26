@@ -31,8 +31,19 @@ export function verifyPin(candidate: string): boolean {
   return candidate === pin;
 }
 
+/**
+ * The client-facing entries of x-forwarded-for are attacker-controlled (a
+ * client can send its own header and Vercel appends the real IP after it),
+ * so the trustworthy value is the LAST entry, not the first. x-real-ip is
+ * set directly by Vercel's edge and can't be overridden by the client.
+ */
 export function requestIp(headers: Headers): string {
+  const realIp = headers.get("x-real-ip");
+  if (realIp) return realIp.trim();
   const forwarded = headers.get("x-forwarded-for");
-  if (forwarded) return forwarded.split(",")[0].trim();
-  return headers.get("x-real-ip") ?? "unknown";
+  if (forwarded) {
+    const parts = forwarded.split(",").map((p) => p.trim());
+    return parts[parts.length - 1] || "unknown";
+  }
+  return "unknown";
 }
