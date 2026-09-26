@@ -4,18 +4,25 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { cn } from "@/lib/cn";
 
+const SIZE = {
+  sm: "max-w-[440px]",
+  lg: "max-w-[680px]",
+};
+
 export function Modal({
   open,
   onClose,
   title,
   children,
   footer,
+  size = "sm",
 }: {
   open: boolean;
   onClose: () => void;
   title?: string;
   children: React.ReactNode;
   footer?: React.ReactNode;
+  size?: keyof typeof SIZE;
 }) {
   const [rendered, setRendered] = useState(open);
   const [prevOpen, setPrevOpen] = useState(open);
@@ -59,7 +66,8 @@ export function Modal({
           if (!open) setRendered(false);
         }}
         className={cn(
-          "relative flex w-full max-w-[440px] flex-col rounded-lg bg-surface shadow-panel transition-all duration-200 ease-out",
+          "relative flex max-h-[85vh] w-full flex-col rounded-lg bg-surface shadow-panel transition-all duration-200 ease-out",
+          SIZE[size],
           open ? "scale-100 opacity-100" : "scale-95 opacity-0",
         )}
       >
@@ -76,7 +84,7 @@ export function Modal({
             </button>
           </div>
         ) : null}
-        <div className="px-5 py-4">{children}</div>
+        <div className="overflow-y-auto px-5 py-4">{children}</div>
         {footer ? <div className="border-t border-line px-5 py-4">{footer}</div> : null}
       </div>
     </div>,
