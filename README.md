@@ -15,7 +15,8 @@ cp .env.local.example .env.local   # fill in your Supabase project URL + anon ke
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Open [http://localhost:3000](http://localhost:3000). You'll be asked for the PIN set in
+`DASHBOARD_PIN` — see `09-auth-deploy.md`.
 
 ## Database
 
@@ -52,6 +53,22 @@ Env vars, in addition to the Supabase ones above:
 - `DIGEST_FROM` — optional sender override (defaults to `Lanes <digest@resend.dev>`).
 
 To trigger it manually in dev: `curl -H "Authorization: Bearer $CRON_SECRET" localhost:3000/api/digest`.
+
+## Handover to Ali
+
+- **The traffic light.** Green means the contract has 8+ weeks left. Amber ("needs
+  attention soon") means 4–7 weeks left. Red ("needs attention now") means under 4
+  weeks left or already ended. It's driven entirely by the end date on the contract —
+  update that date and the light updates itself.
+- **Logging a comment.** Open a prospect, type into "Log a comment" at the bottom of
+  the drawer, and hit Log comment. It's timestamped and stays on that prospect's
+  record for anyone who opens it later — this is how the whole team stays in sync on
+  where a conversation with a brand stands, instead of it living in someone's head or
+  a WhatsApp thread.
+- **Importing the Excel sheet.** From the Import tab, drop your `.xlsx`/`.xls`/`.csv`
+  file, choose whether it's contracts or prospects, then match each field to a column
+  from your file (the app guesses this for you first). Preview the rows before
+  confirming — nothing is written until you approve that screen.
 
 ## Testing
 
