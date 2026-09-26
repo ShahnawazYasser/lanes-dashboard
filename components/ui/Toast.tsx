@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useCallback, useContext, useRef, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 const DISMISS_MS = 2200;
@@ -12,6 +12,9 @@ const ToastContext = createContext<((message: string) => void) | null>(null);
 export function ToastProvider({ children }: { children: React.ReactNode }) {
   const [toasts, setToasts] = useState<ToastItem[]>([]);
   const nextId = useRef(0);
+  const [mounted, setMounted] = useState(false);
+  // eslint-disable-next-line react-hooks/set-state-in-effect -- standard SSR "mounted" flag; portal must not render until after hydration.
+  useEffect(() => setMounted(true), []);
 
   const showToast = useCallback((message: string) => {
     const id = nextId.current++;
@@ -24,7 +27,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
   return (
     <ToastContext.Provider value={showToast}>
       {children}
-      {typeof document !== "undefined"
+      {mounted
         ? createPortal(
             <div className="pointer-events-none fixed inset-x-0 bottom-[calc(env(safe-area-inset-bottom,0px)+16px)] z-[60] flex flex-col items-center gap-2 px-4">
               {toasts.map((t) => (
