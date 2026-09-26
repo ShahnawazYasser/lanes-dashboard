@@ -41,6 +41,29 @@ export function fmtDate(dateStr: string | null | undefined): string {
   return `${dd}/${mm}/${yyyy}`;
 }
 
+/** Formats an ISO timestamp as "DD/MM/YYYY, HH:MM" in Asia/Karachi. */
+export function fmtDateTime(isoTimestamp: string): string {
+  const d = new Date(isoTimestamp);
+  const parts = new Intl.DateTimeFormat("en-GB", {
+    timeZone: KARACHI_TZ,
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  }).formatToParts(d);
+  const get = (type: string) => parts.find((p) => p.type === type)!.value;
+  return `${get("day")}/${get("month")}/${get("year")}, ${get("hour")}:${get("minute")}`;
+}
+
+/** Shifts a Postgres `date` string ("YYYY-MM-DD") by `days` (may be negative), returned in the same format. */
+export function shiftDateOnly(dateStr: string, days: number): string {
+  const d = parseDateOnly(dateStr);
+  d.setUTCDate(d.getUTCDate() + days);
+  return d.toISOString().slice(0, 10);
+}
+
 /** Formats an integer PKR amount, e.g. 85000 -> "PKR 85,000". */
 export function fmtPKR(amount: number): string {
   return `PKR ${Math.round(amount).toLocaleString("en-US")}`;

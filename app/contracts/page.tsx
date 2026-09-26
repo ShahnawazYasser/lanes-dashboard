@@ -1,13 +1,10 @@
-import { Panel } from "@/components/ui/Panel";
-import { EmptyState } from "@/components/ui/EmptyState";
+import { Suspense } from "react";
+import { ContractsView } from "@/components/contracts/ContractsView";
 
 export default function ContractsPage() {
   return (
-    <Panel>
-      <EmptyState
-        title="Contracts screen not built yet"
-        hint="This will list every brand's contract with a traffic light and an edit drawer."
-      />
-    </Panel>
+    <Suspense>
+      <ContractsView />
+    </Suspense>
   );
 }

@@ -1,13 +1,5 @@
-import { Panel } from "@/components/ui/Panel";
-import { EmptyState } from "@/components/ui/EmptyState";
+import { OverviewView } from "@/components/overview/OverviewView";
 
 export default function OverviewPage() {
-  return (
-    <Panel>
-      <EmptyState
-        title="Overview is coming together"
-        hint="This screen will compose Contracts and Prospects once both are built."
-      />
-    </Panel>
-  );
+  return <OverviewView />;
 }
